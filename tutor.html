@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tutor Dashboard | MicroSpark</title>
+  <link rel="stylesheet" href="student.css" />
+   <link rel="icon" href="img/fav.png" type="image/png">
+</head>
+<body>
+  <header class="dash-header">
+    <h1 id="username">Welcome, Tutor 👨‍🏫</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#">Students</a>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="upload-section">
+      <h2>Upload New Lesson</h2>
+      <form id="uploadForm">
+        <input type="text" id="lessonTitle" placeholder="Lesson Title" required />
+        <textarea id="lessonDesc" placeholder="Lesson Description" required></textarea>
+        <input type="file" id="lessonVideo" accept="video/*" required />
+        <button type="submit">Upload Lesson</button>
+      </form>
+    </section>
+
+    <section class="lesson-list">
+      <h2>Your Lessons</h2>
+      <div id="lessonsContainer"></div>
+    </section>
+  </main>
+
+   <footer>
+    <div class="container footer-container">
+      <p>&copy; 2025 MicroSpark. You spark minds. <br> designed by <a href="https://genty-studios.vercel.app" style="text-decoration: none; color: #6a1b9a;">GentyStudios</a></p>
+    </div>
+  </footer>
+
+  <!-- <script src="app.js"></script> -->
+
+  <script>
+  const lessonsContainer = document.getElementById("lessonsContainer");
+const uploadForm = document.getElementById("uploadForm");
+
+// Convert file to Base64 Data URL (returns a Promise)
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+
+// Load lessons and render them
+function loadLessons() {
+  const lessons = JSON.parse(localStorage.getItem("microSparkLessons")) || [];
+  lessonsContainer.innerHTML = "";
+
+  if (lessons.length === 0) {
+    lessonsContainer.innerHTML = "<p>No lessons uploaded yet.</p>";
+    return;
+  }
+
+  lessons.forEach((lesson, index) => {
+    const lessonDiv = document.createElement("div");
+    lessonDiv.classList.add("lesson-item");
+    lessonDiv.innerHTML = `
+      <h3>${lesson.title}</h3>
+      <p>${lesson.description}</p>
+      <video width="300" controls>
+        <source src="${lesson.videoURL}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <button class="delete-btn" data-index="${index}">Delete</button>
+    `;
+    lessonsContainer.appendChild(lessonDiv);
+  });
+
+  // Attach delete button handlers
+  lessonsContainer.querySelectorAll(".delete-btn").forEach(button => {
+    button.addEventListener("click", e => {
+      const index = e.target.getAttribute("data-index");
+      const lessons = JSON.parse(localStorage.getItem("microSparkLessons")) || [];
+      lessons.splice(index, 1);
+      localStorage.setItem("microSparkLessons", JSON.stringify(lessons));
+      loadLessons();
+    });
+  });
+}
+
+// Handle upload form submit
+uploadForm.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const title = document.getElementById("lessonTitle").value.trim();
+  const description = document.getElementById("lessonDesc").value.trim();
+  const videoFile = document.getElementById("lessonVideo").files[0];
+
+  if (!title || !description || !videoFile) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  try {
+    // Convert video file to Base64 string
+    const videoURL = await toBase64(videoFile);
+
+    const newLesson = { title, description, videoURL };
+
+    const lessons = JSON.parse(localStorage.getItem("microSparkLessons")) || [];
+    lessons.push(newLesson);
+    localStorage.setItem("microSparkLessons", JSON.stringify(lessons));
+
+    uploadForm.reset();
+    loadLessons();
+    alert("Lesson uploaded successfully!");
+  } catch (error) {
+    console.error("Error uploading video:", error);
+    alert("Failed to upload video.");
+  }
+});
+
+// Load lessons on page load
+loadLessons();
+
+// User welcome header (your existing code)
+const userData = JSON.parse(localStorage.getItem("microSparkUser"));
+if (userData && userData.username) {
+  const header = document.querySelector(".dash-header h1");
+  if (header) {
+    header.textContent = `Welcome, ${userData.username}`;
+  }
+} else {
+  alert("No user data found. Redirecting to login...");
+  window.location.href = "login.html";
+}
+
+
+</script>
+
+</body>
+</html>

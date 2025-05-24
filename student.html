@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard | MicroSpark</title>
+  <link rel="stylesheet" href="student.css" />
+   <link rel="icon" href="img/fav.png" type="image/png">
+</head>
+<body>
+  <header class="dash-header">
+    <h1>Welcome, <span id="studentName">Learner</span> 🌟</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="#">My Progress</a>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="hero-banner">
+      <h2>Keep Learning, Keep Growing 🚀</h2>
+      <p>"Every expert was once a beginner. Stay consistent!"</p>
+    </section>
+
+    <section class="engagement-panel">
+      <div class="badge">
+        <h3>🔥 Streak</h3>
+        <p>3 days</p>
+      </div>
+      <div class="badge">
+        <h3>📚 Lessons Watched</h3>
+        <p>5</p>
+      </div>
+      <div class="badge">
+        <h3>🎯 Goals</h3>
+        <p>2/5 this week</p>
+      </div>
+    </section>
+
+    <section class="student-lessons">
+      <h2>Available Lessons</h2>
+      <div id="studentLessons"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-container">
+      <p>&copy; 2025 MicroSpark. You spark minds. <br> designed by <a href="https://genty-studios.vercel.app" style="text-decoration: none; color: #6a1b9a;">GentyStudios</a></p>
+    </div>
+  </footer>
+
+
+  <script src="app.js"></script>
+</body>
+
+
+<!-- This is where the styles are  -->
+<style>
+    /* ============ Student Dashboard ============ */
+
+.dash-header {
+  background: #6a1b9a;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 0 12px 12px;
+}
+
+.dash-header nav a {
+  margin-left: 1.5rem;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.hero-banner {
+  text-align: center;
+  background: #f5f5fa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin: 2rem 1rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+}
+
+.hero-banner h2 {
+  color: #6a1b9a;
+  font-size: 1.8rem;
+}
+
+.engagement-panel {
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 1rem;
+  gap: 1rem;
+}
+
+.engagement-panel .badge {
+  flex: 1;
+  background: #fff;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.student-lessons {
+  margin: 2rem 1rem;
+}
+
+.student-lessons h2 {
+  color: #6a1b9a;
+  margin-bottom: 1rem;
+}
+
+.lesson-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+
+</style>
+
+<script>
+  const userData = JSON.parse(localStorage.getItem("microSparkUser"));
+
+  if (userData && userData.username) {
+    const header = document.querySelector(".dash-header h1");
+    if (header) {
+      header.textContent = `Welcome, ${userData.username}`;
+    }
+  } else {
+    // No user data found — maybe they opened this page directly
+    alert("No user data found. Redirecting to login...");
+    window.location.href = "login.html";
+  }
+
+
+  // To update the features from the tutors dashboard
+  function renderLessons() {
+  const lessons = JSON.parse(localStorage.getItem("microSparkLessons")) || [];
+  const container = document.getElementById("studentLessons");
+
+  if (!container) return;
+
+  if (lessons.length === 0) {
+    container.innerHTML = "<p>No lessons available yet.</p>";
+    return;
+  }
+
+  container.innerHTML = lessons.map(lesson => `
+    <div class="lesson-item">
+      <h3>${lesson.title}</h3>
+      <p>${lesson.description}</p>
+      <video controls width="100%" style="border-radius: 8px;">
+        <source src="${lesson.videoURL}" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  `).join("");
+}
+
+// Initial render
+renderLessons();
+
+// Listen for changes made in other tabs/windows (tutor dashboard)
+window.addEventListener("storage", (event) => {
+  if (event.key === "microSparkLessons") {
+    renderLessons();
+  }
+});
+
+</script>
+
+</html>
