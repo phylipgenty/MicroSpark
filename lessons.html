@@ -67,6 +67,70 @@ nav a:hover {
   color:  #db0979;
 }
 
+/* Respnosivness */
+/* Mobile styles (phones) */
+@media (max-width: 600px) {
+  .container {
+    width: 95%;
+  }
+
+  .header-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  nav a {
+    margin-left: 0;
+    font-size: 1rem;
+  }
+
+  .lesson {
+    padding: 15px;
+  }
+
+  .lesson h2 {
+    font-size: 1.2rem;
+  }
+
+  .quiz {
+    font-size: 0.95rem;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 601px) and (max-width: 900px) {
+  .container {
+    width: 90%;
+  }
+
+  .lesson h2 {
+    font-size: 1.4rem;
+  }
+
+  nav a {
+    font-size: 1.05rem;
+  }
+}
+
+/* Desktop styles (optional for refinements) */
+@media (min-width: 901px) {
+  .lesson h2 {
+    font-size: 1.6rem;
+  }
+
+  nav a {
+    font-size: 1.1rem;
+  }
+}
+
 
   </style>
    <link rel="icon" href="img/fav.png" type="image/png">

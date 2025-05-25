@@ -299,11 +299,91 @@ footer {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+/* Responsive: Tablets */
+@media (max-width: 992px) {
   .hero {
     flex-direction: column-reverse;
+    padding: 3rem 1rem;
   }
+
+  .hero-text h2 {
+    font-size: 2.2rem;
+  }
+
+  .hero-text p {
+    font-size: 1.1rem;
+  }
+
   .features {
     flex-direction: column;
+  }
+
+  .testimonial-slider-wrapper {
+    padding: 0 1rem;
+  }
+
+  .cta-section {
+    padding: 3rem 1rem;
+  }
+
+  .stats {
+    flex-direction: column;
+  }
+
+  .newsletter input[type="email"] {
+    width: 80%;
+  }
+}
+
+
+/* Responsive: Mobile Devices */
+@media (max-width: 576px) {
+  .header-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  nav a {
+    display: block;
+    margin: 0.5rem 0;
+  }
+
+  .hero-text h2 {
+    font-size: 1.8rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .feature {
+    padding: 1.5rem 1rem;
+  }
+
+  .testimonial {
+    padding: 1rem;
+  }
+
+  .cta-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .newsletter input[type="email"],
+  .newsletter button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .stat h3 {
+    font-size: 2rem;
+  }
+
+  footer {
+    font-size: 0.8rem;
   }
 }
